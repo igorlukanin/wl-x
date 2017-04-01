@@ -5,8 +5,10 @@
     "bluebird": "^3.5.0",
     "compression": "^1.6.2",
     "config": "^1.25.1",
+    "cookie-parser": "^1.4.3",
     "ect": "^0.5.9",
     "express": "^4.15.2",
+    "moment": "^2.18.1",
     "request": "^2.81.0",
     "rethinkdb": "^2.3.3",
     "uuid": "^3.0.1"

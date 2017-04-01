@@ -1,8 +1,10 @@
 const compression = require('compression');
 const config = require('config');
+const cookieParser = require('cookie-parser');
 const ect = require('ect');
 const express = require('express');
 
+const users = require('../users');
 const wunderlist = require('../wunderlist');
 
 
@@ -11,14 +13,18 @@ const port = config.get('website.port');
 
 express()
     .use(compression())
+    .use(cookieParser())
     .use('/static', express.static('static'))
 
-    .get('/', (req, res) => res.render('index'))
+    .get('/', (req, res) => users.getByToken(req)
+        .then(user => res.render('user', { user }))
+        .catch(err => res.render('index')))
 
     .get('/login', (req, res) => res.redirect(wunderlist.getOAuthUrl()))
 
     .get('/login/result', (req, res) => wunderlist.getOAuthUser(req.query.state, req.query.code)
-        .then(user => res.render('user', { user }))
+        .then(users.create)
+        .then(user => users.setToken(user, res).redirect('/'))
         .catch(err => res.render('index')))
 
     .set('view engine', 'ect')

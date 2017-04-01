@@ -10,6 +10,10 @@
     "redirectUri": "http://localhost:4090/login/result"
   },
   "website": {
-    "port": 4090
+    "port": 4090,
+    "authCookie": {
+      "name": "token",
+      "expireDays": 365
+    }
   }
 }
