@@ -28,6 +28,8 @@ express()
         .catch(err => res.render('index')))
 
     .set('view engine', 'ect')
-    .set('views', __dirname + '/../../views')
-    .engine('ect', ect({ watch: true }).render)
+    .engine('ect', ect({
+        watch: true,
+        root: __dirname + '/../../views'
+    }).render)
     .listen(port, () => console.info('Website started at port ' + port));
