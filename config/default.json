@@ -1,0 +1,10 @@
+{
+  "rethinkdb": {
+    "host": "localhost",
+    "port": 28015,
+    "db": "wlx"
+  },
+  "website": {
+    "port": 4090
+  }
+}
