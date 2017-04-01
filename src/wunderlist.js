@@ -3,7 +3,7 @@ const Promise = require('bluebird');
 const request = require('request');
 const uuid = require('uuid/v4');
 
-
+// request.debug = true;
 const clientId = config.get('wunderlist.clientId');
 const clientSecret = config.get('wunderlist.clientSecret');
 const redirectUri = config.get('wunderlist.redirectUri');
@@ -47,10 +47,11 @@ const getOAuthAccessToken = (state, code) => new Promise((resolve, reject) => {
 
 const getApiEndpointUri = endpoint => 'https://a.wunderlist.com/api/v1/' + endpoint;
 
-const requestApi = (accessToken, endpoint, method = 'GET', params = {}) => new Promise((resolve, reject) => request({
+const requestApi = (accessToken, endpoint, params = {}, method = 'GET') => new Promise((resolve, reject) => request({
     url: getApiEndpointUri(endpoint),
     method,
-    json: params,
+    json: true,
+    qs: params,
     headers: {
         'X-Client-ID': clientId,
         'X-Access-Token': accessToken
@@ -70,8 +71,27 @@ const getOAuthUser = (state, code) => getOAuthAccessToken(state, code)
         return user;
     }));
 
+const getLists = accessToken => requestApi(accessToken, 'lists');
+
+const getTasks = (accessToken, listId) => requestApi(accessToken, 'tasks', {
+    list_id: listId
+});
+
+const getCompletedTasks = (accessToken, listId) => requestApi(accessToken, 'tasks', {
+    completed: true,
+    list_id: listId
+});
+
+const getSubtasks = (accessToken, taskId) => requestApi(accessToken, 'subtasks', {
+    task_id: taskId
+});
+
 
 module.exports = {
     getOAuthUrl,
-    getOAuthUser
+    getOAuthUser,
+    getLists,
+    getTasks,
+    getCompletedTasks,
+    getSubtasks
 };

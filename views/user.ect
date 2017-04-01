@@ -1,3 +1,18 @@
 <% extend 'layout.ect' %>
 
-<pre><%- JSON.stringify(@user, null, 2); %></pre>
+<pre><%= @user.name %>, <%= @user.email %></pre>
+
+<pre>
+<% for @list_ in @tasks: %>
+* <%= @list_.list.title %>
+
+<% for @task_ in @list_.tasks: %>
+  <% if @task_.task.completed: %>+<% else: %>-<% end %> <%= @task_.task.title %>
+
+<% for @subtask in @task_.subtasks: %>
+    <% if @subtask.completed: %>+<% else: %>-<% end %> <%= @subtask.title %>
+
+<% end %>
+<% end %>
+<% end %>
+</pre>
