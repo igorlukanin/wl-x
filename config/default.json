@@ -4,6 +4,11 @@
     "port": 28015,
     "db": "wlx"
   },
+  "wunderlist": {
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUri": "http://localhost:4090/login/result"
+  },
   "website": {
     "port": 4090
   }
