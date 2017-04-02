@@ -8,12 +8,14 @@
     "cookie-parser": "^1.4.3",
     "ect": "^0.5.9",
     "express": "^4.15.2",
+    "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "request": "^2.81.0",
     "rethinkdb": "^2.3.3",
     "uuid": "^3.0.1"
   },
   "scripts": {
+    "crawler": "NODE_ENV=production node src/app/crawler.js",
     "website": "NODE_ENV=production node src/app/website.js"
   }
 }

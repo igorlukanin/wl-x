@@ -1,4 +1,5 @@
 const config = require('config');
+const _ = require('lodash');
 const moment = require('moment');
 const Promise = require('bluebird');
 const uuid = require('uuid/v4');
@@ -14,9 +15,70 @@ const cookieLifetimeDays = config.get('website.authCookie.expireDays');
 const create = user => {
     user.cookieToken = uuid();
 
-    return db.upsertUser(user)
-        .then(result => user);
+    return wunderlist.getRoot(user.accessToken).then(root => {
+        user.root = root;
+
+        return db.upsertUser(user).then(result => user);
+    });
 };
+
+const updateRoot = user => wunderlist.getRoot(user.accessToken).then(root => {
+    if (user.root.revision === root.revision) {
+        return Promise.reject(user);
+    }
+    else {
+        user.root = root;
+        return db.upsertUser(user).then(result => user);
+    }
+});
+
+const intersect = (inDatabase, inWunderlist) => {
+    const inDatabaseDeleted = inDatabase.filter(x => x.deleted !== undefined && x.deleted);
+    const inDatabaseNotDeleted = _.difference(inDatabase, inDatabaseDeleted);
+
+    const unchanged = _.intersectionWith(inWunderlist, inDatabaseNotDeleted, _.isEqual);
+    const changed = _.differenceWith(inWunderlist, unchanged, _.isEqual);
+    const justDeleted = _.differenceBy(inDatabaseNotDeleted, unchanged, changed, x => x.id).map(x => {
+        x.deleted = true;
+        return x;
+    });
+
+    return {
+        alreadyDeleted: inDatabaseDeleted,
+        unchanged,
+        changed,
+        justDeleted
+    };
+};
+
+const updateLists = user => Promise.all([
+    db.getLists(user.id),
+    wunderlist.getLists(user.accessToken)
+]).then(result => {
+    const sets = intersect(result[0], result[1]);
+
+    return Promise.all([
+        db.upsertLists(sets.changed.concat(sets.justDeleted)),
+        Promise.map(sets.changed, list => updateTasks(user, list))
+    ]);
+});
+
+const updateTasks = (user, list) => Promise.all([
+    db.getTasks(list.id),
+    wunderlist.getTasks(user.accessToken, list.id),
+    wunderlist.getCompletedTasks(user.accessToken, list.id)
+]).then(result => {
+    const sets = intersect(result[0], result[1].concat(result[2]));
+    const tasks = sets.changed.concat(sets.justDeleted);
+
+    return Promise.map(tasks, task => updateTask(user, task))
+        .then(db.upsertTasks);
+});
+
+const updateTask = (user, task) => wunderlist.getSubtasks(user.accessToken, task.id).then(subtasks => {
+    task.subtasks = subtasks;
+    return task;
+});
 
 const setToken = (user, res) => {
     res.cookie(cookieName, user.cookieToken, {
@@ -51,31 +113,17 @@ const getCompletedTasks = (user, lateDate = new Date(), earlyDate) => {
         ? moment(lateMoment).subtract(1, 'day')
         : moment(earlyDate);
 
-    return wunderlist.getLists(user.accessToken)
-        .then(lists => Promise.all(lists.map(list => Promise.all([
-            wunderlist.getTasks(user.accessToken, list.id),
-            wunderlist.getCompletedTasks(user.accessToken, list.id)
-        ]).then(result => ({
-            list,
-            tasks: result[0].concat(result[1]).filter(task => {
-                return isCompletedBetween(task, earlyMoment, lateMoment)
-                    || !task.completed;
-            })
-        })))))
-        .then(lists => Promise.all(lists.map(list => Promise
-            .all(list.tasks.map(task => wunderlist.getSubtasks(user.accessToken, task.id)
-            .then(subtasks => ({ task, subtasks }))))
-        .then(tasks => ({
-            list: list.list,
-            tasks: tasks.filter(task => task.task.completed
-                || !task.task.completed && task.subtasks.some(subtask => isCompletedBetween(subtask, earlyMoment, lateMoment)))
-        })))))
-        .then(lists => lists.filter(list => list.tasks.length > 0));
+    return db.getLists(user.id).then(lists => {
+        const ids = lists.map(list => list.id);
+        return db.getCompletedTasks(ids, earlyMoment.toDate(), lateMoment.toDate());
+    });
 };
 
 
 module.exports = {
     create,
+    updateRoot,
+    updateLists,
     setToken,
     getByToken,
     getCompletedTasks

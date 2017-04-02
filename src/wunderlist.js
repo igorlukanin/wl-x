@@ -71,6 +71,8 @@ const getOAuthUser = (state, code) => getOAuthAccessToken(state, code)
         return user;
     }));
 
+const getRoot = accessToken => requestApi(accessToken, 'root');
+
 const getLists = accessToken => requestApi(accessToken, 'lists');
 
 const getTasks = (accessToken, listId) => requestApi(accessToken, 'tasks', {
@@ -90,6 +92,7 @@ const getSubtasks = (accessToken, taskId) => requestApi(accessToken, 'subtasks',
 module.exports = {
     getOAuthUrl,
     getOAuthUser,
+    getRoot,
     getLists,
     getTasks,
     getCompletedTasks,
