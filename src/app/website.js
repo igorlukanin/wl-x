@@ -17,11 +17,9 @@ express()
     .use('/static', express.static('static'))
 
     .get('/', (req, res) => users.getByToken(req)
-        .then(user => users.getCompletedTasks(user)
-            .then(tasks => res.render('user', {
-                user,
-                tasks
-            })))
+        .then(user => users.getCompletedTasks(user).then(tasks => {
+            res.render('user', { user, tasks });
+        }))
         .catch(err => res.render('index')))
 
     .get('/login', (req, res) => res.redirect(wunderlist.getOAuthUrl()))

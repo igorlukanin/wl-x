@@ -15,15 +15,11 @@ const cookieLifetimeDays = config.get('website.authCookie.expireDays');
 const create = user => {
     user.cookieToken = uuid();
 
-    return wunderlist.getRoot(user.accessToken).then(root => {
-        user.root = root;
-
-        return db.upsertUser(user).then(result => user);
-    });
+    return db.upsertUser(user).then(result => user);
 };
 
 const updateRoot = user => wunderlist.getRoot(user.accessToken).then(root => {
-    if (user.root.revision === root.revision) {
+    if (user.root !== undefined && user.root.revision === root.revision) {
         return Promise.reject(user);
     }
     else {

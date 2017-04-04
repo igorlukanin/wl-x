@@ -9,7 +9,7 @@ const checkRoots = () => db.feedUsers(entry => {
     const user = entry.new_val;
 
     if (user !== undefined) {
-        console.info(entry.type + ' / ' + user.id);
+        console.info('Crawler: ' + entry.type + ' / ' + user.id);
 
         Promise.resolve(user)
             .then(users.updateRoot)

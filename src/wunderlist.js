@@ -1,14 +1,19 @@
 const config = require('config');
 const Promise = require('bluebird');
-const request = require('request');
+const request = require('throttled-request')(require('request'));
 const uuid = require('uuid/v4');
 
-// request.debug = true;
 const clientId = config.get('wunderlist.clientId');
 const clientSecret = config.get('wunderlist.clientSecret');
 const redirectUri = config.get('wunderlist.redirectUri');
 
 const states = [];
+let requestCount = 0;
+
+request.configure({
+    requests: config.get('wunderlist.apiRequestsPerSecond'),
+    milliseconds: 1000
+});
 
 
 const getOAuthUrl = () => {
@@ -47,6 +52,12 @@ const getOAuthAccessToken = (state, code) => new Promise((resolve, reject) => {
 
 const getApiEndpointUri = endpoint => 'https://a.wunderlist.com/api/v1/' + endpoint;
 
+const logApiCall = (endpoint, err) => console.info(
+    'Wunderlist API call # ' + (++requestCount) + ': ' +
+    endpoint +
+    (err ? ' — error' : '')
+);
+
 const requestApi = (accessToken, endpoint, params = {}, method = 'GET') => new Promise((resolve, reject) => request({
     url: getApiEndpointUri(endpoint),
     method,
@@ -57,6 +68,8 @@ const requestApi = (accessToken, endpoint, params = {}, method = 'GET') => new P
         'X-Access-Token': accessToken
     }
 }, (err, res) => {
+    logApiCall(endpoint, err);
+
     if (err) {
         reject('Failed to call API');
         return;

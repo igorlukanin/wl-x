@@ -7,7 +7,8 @@
   "wunderlist": {
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://localhost:4090/login/result"
+    "redirectUri": "http://localhost:4090/login/result",
+    "apiRequestsPerSecond": 25
   },
   "website": {
     "port": 4090,
