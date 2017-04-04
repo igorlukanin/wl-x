@@ -102,16 +102,18 @@ const getByToken = req => new Promise((resolve, reject) => {
 const isCompletedBetween = (entry, date1, date2) =>
     entry.completed && moment(entry.completed_at).isBetween(date1, date2);
 
-const getCompletedTasks = (user, lateDate = new Date(), earlyDate) => {
-    const lateMoment = moment(lateDate);
-
-    const earlyMoment = earlyDate === undefined
-        ? moment(lateMoment).subtract(1, 'day')
-        : moment(earlyDate);
+const getCompletedTasks = user => {
+    const days = [1, 2, 3, 4, 5, 6, 7].map(i => ({
+        start: moment().isoWeekday(i).startOf('day').toDate(),
+        end: moment().isoWeekday(i + 1).startOf('day').toDate()
+    }));
 
     return db.getLists(user.id).then(lists => {
         const ids = lists.map(list => list.id);
-        return db.getCompletedTasks(ids, earlyMoment.toDate(), lateMoment.toDate());
+
+        return Promise
+            .map(days, day => db.getCompletedTasks(ids, day.start, day.end))
+            .then(tasks => days.map((day, i) => ({ day, tasks: tasks[i] })));
     });
 };
 

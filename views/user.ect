@@ -1,15 +1,8 @@
 <% extend 'layout.ect' %>
 
-<pre><%= @user.name %>, <%= @user.email %></pre>
+<!-- <%= @user.name %> -->
+<!-- <%= @user.email %> -->
 
-<pre>
-<% for @task_ in @tasks: %>
-<% if @task_.task.completed: %>+<% else: %>-<% end %> <%= @task_.task.title %> / <%= @task_.list.title %>
+<div class='days'></div>
 
-<% for @subtask in @task_.task.subtasks: %>
-    <% if @subtask.completed: %>+<% else: %>-<% end %> <%= @subtask.title %>
-
-<% end %>
-
-<% end %>
-</pre>
+<script src="/data.js"></script>

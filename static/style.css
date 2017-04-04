@@ -1,7 +1,53 @@
 body {
     font-family: 'Helvetica Neue', sans-serif;
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: 300;
 
-    margin: 10vh;
+    margin: 0;
+}
+
+.days {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.days__day {
+    box-sizing: border-box;
+
+    border: solid 1px #eee;
+
+    padding: 1em;
+
+    height: 50vh;
+    width: 25vw;
+}
+
+.days__day_summary {}
+
+.days__day__title {
+    text-align: center;
+}
+
+.days__day__date {
+    opacity: 0.5;
+
+    text-align: center;
+
+    margin-top: 0.5em;
+}
+
+.days__day__tasks {
+    margin-top: 1em;
+}
+
+.days__day__tasks__task {}
+
+.days__day__tasks__task__title {
+    margin-bottom: 0.5em;
+}
+
+.days__day__tasks__task__list {
+    opacity: 0.5;
+
+    font-weight: 400;
 }

@@ -14,13 +14,16 @@ const port = config.get('website.port');
 express()
     .use(compression())
     .use(cookieParser())
-    .use('/static', express.static('static'))
+
+    .use('/', express.static('static'))
+    .use('/moment.js', express.static('node_modules/moment/min/moment.min.js'))
 
     .get('/', (req, res) => users.getByToken(req)
-        .then(user => users.getCompletedTasks(user).then(tasks => {
-            res.render('user', { user, tasks });
-        }))
+        .then(user => res.render('user', { user }))
         .catch(err => res.render('index')))
+
+    .get('/tasks.json', (req, res) => users.getByToken(req)
+        .then(user => users.getCompletedTasks(user).then(tasks => res.json(tasks))))
 
     .get('/login', (req, res) => res.redirect(wunderlist.getOAuthUrl()))
 
