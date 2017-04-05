@@ -8,6 +8,7 @@
     "cookie-parser": "^1.4.3",
     "ect": "^0.5.9",
     "express": "^4.15.2",
+    "lato-font": "^3.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "request": "^2.81.0",

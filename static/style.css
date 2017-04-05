@@ -1,6 +1,9 @@
 body {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 12pt;
+    background: #fafafa;
+    color: #444;
+
+    font-family: 'Lato', sans-serif;
+    font-size: 11pt;
     font-weight: 300;
 
     margin: 0;
@@ -15,8 +18,10 @@ body {
     box-sizing: border-box;
 
     border: solid 1px #eee;
+    border-top: 0;
+    border-right: 0;
 
-    padding: 1em;
+    padding: 5vh 2.5vw;
 
     height: 50vh;
     width: 25vw;
@@ -25,7 +30,19 @@ body {
 .days__day_summary {}
 
 .days__day__title {
+    color: #5b5b5b;
+
+    font-size: 2em;
+
     text-align: center;
+}
+
+.days__day_weekend > .days__day__title {
+    color: #db4c3f;
+}
+
+.days__day_summary > .days__day__title {
+    color: #2b88d9;
 }
 
 .days__day__date {
@@ -36,18 +53,66 @@ body {
     margin-top: 0.5em;
 }
 
+.days__day__tasks-placeholder {
+    opacity: 0.5;
+
+    text-align: center;
+
+    margin-top: 15vh;
+}
+
+.days__day__week-summary {
+    font-size: 2em;
+
+    text-align: center;
+
+    margin-top: 10vh;
+}
+
+.days__day__week-summary__subtasks {
+    text-align: center;
+
+    margin-top: 0.5em;
+}
+
 .days__day__tasks {
-    margin-top: 1em;
+    margin-top: 5vh;
 }
 
 .days__day__tasks__task {}
 
 .days__day__tasks__task__title {
-    margin-bottom: 0.5em;
+    margin: 0.5em auto 0.25em;
+
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.days__day__tasks__task__title:before {
+    position: absolute;
+    margin-left: -1em;
+
+    color: #65b01b;
+
+    content: '•';
+}
+
+.days__day__tasks__task_not-completed > .days__day__tasks__task__title:before {
+    color: #ccc;
 }
 
 .days__day__tasks__task__list {
-    opacity: 0.5;
-
     font-weight: 400;
+
+    margin: 1em auto 0.5em;
+}
+
+.days__day__tasks__task__subtasks {
+    font-size: 0.9em;
+
+    padding-left: 1.25em;
+}
+
+.days__day__tasks__task__subtasks .days__day__tasks__task__title {
+    margin: 0.125em auto;
 }
