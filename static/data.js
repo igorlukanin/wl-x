@@ -68,6 +68,7 @@
         var day = d3.select(this)
             .append('div')
             .classed('days__day', true)
+            .classed('days__day_today', today.isoWeekday() === moment().isoWeekday())
             .classed('days__day_weekend', today.isoWeekday() >= 6);
 
         day.append('div')

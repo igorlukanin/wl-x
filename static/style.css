@@ -27,6 +27,10 @@ body {
     width: 25vw;
 }
 
+.days__day_today {
+    background: #fff;
+}
+
 .days__day_summary {}
 
 .days__day__title {
