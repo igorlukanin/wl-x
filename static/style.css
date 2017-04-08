@@ -25,6 +25,8 @@ body {
 
     height: 50vh;
     width: 25vw;
+
+    overflow-y: scroll;
 }
 
 .days__day_today {
@@ -86,27 +88,28 @@ body {
 .days__day__tasks__task {}
 
 .days__day__tasks__task__title {
-    margin: 0.5em auto 0.25em;
+    display: flex;
 
+    margin: 0.25em auto;
+    margin-left: -1em;
+}
+
+.days__day__tasks__task__title__bullet {
+    display: inline-block;
+
+    color: #65b01b;
+
+    min-width: 1em;
+    max-width: 1em;
+}
+
+.days__day__tasks__task__title__text {
     overflow: hidden;
     white-space: nowrap;
 }
 
-.days__day__tasks__task__title:before {
-    position: absolute;
-    margin-left: -1em;
-
-    color: #65b01b;
-
-    content: '•';
-}
-
-.days__day__tasks__task_not-completed > .days__day__tasks__task__title:before {
+.days__day__tasks__task_not-completed .days__day__tasks__task__title__bullet {
     color: #ccc;
-}
-
-.days__day__tasks__task__title_trimmed {
-    font-style: italic;
 }
 
 .days__day__tasks__task__list {
@@ -118,7 +121,12 @@ body {
 .days__day__tasks__task__subtasks {
     font-size: 0.9em;
 
-    padding-left: 1.25em;
+    padding-left: 0.25em;
+    margin-bottom: 0.5em;
+}
+
+.days__day__tasks__task__subtasks .days__day__tasks__task__title__bullet {
+    color: #65b01b;
 }
 
 .days__day__tasks__task__subtasks .days__day__tasks__task__title {

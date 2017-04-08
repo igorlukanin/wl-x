@@ -1,22 +1,21 @@
 (function() {
     var timezone = 'UTC';
-    var subtaskListLimit = 3;
-
-    var getSubtaskTitle = function(data) {
-        return data.trimmed
-            ? data.trimmedCount + ' more subtask' + (data.trimmedCount === 1 ? '' : 's')
-            : data.title;
-    };
 
     var drawSubtask = function(data) {
         var subtask = d3.select(this)
             .append('div')
             .classed('days__day__tasks__task', true);
 
-        subtask.append('div')
-            .classed('days__day__tasks__task__title', true)
-            .classed('days__day__tasks__task__title_trimmed', data.trimmed)
-            .text(getSubtaskTitle(data));
+        var title = subtask.append('div')
+            .classed('days__day__tasks__task__title', true);
+
+        title.append('span')
+            .classed('days__day__tasks__task__title__bullet', true)
+            .text('•');
+
+        title.append('span')
+            .classed('days__day__tasks__task__title__text', true)
+            .text(data.title);
     };
 
     var emojiRegex = /^([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/;
@@ -30,17 +29,6 @@
     };
 
     let usedLists = [];
-
-    var trimSubtasks = function(subtasks) {
-        var trimmed = subtasks.slice(0, subtaskListLimit);
-
-        if (subtasks.length > subtaskListLimit) {
-            trimmed[trimmed.length - 1].trimmed = true;
-            trimmed[trimmed.length - 1].trimmedCount = subtasks.length - trimmed.length + 1;
-        }
-
-        return trimmed;
-    };
 
     var drawTask = function(data) {
         var task = d3.select(this)
@@ -56,17 +44,22 @@
                 .html(getListTitle(data.list));
         }
 
-        task.append('div')
-            .classed('days__day__tasks__task__title', true)
+        var title = task.append('div')
+            .classed('days__day__tasks__task__title', true);
+
+        title.append('span')
+            .classed('days__day__tasks__task__title__bullet', true)
+            .text('•');
+
+        title.append('span')
+            .classed('days__day__tasks__task__title__text', true)
             .text(data.task.title);
 
-        var subtasks = trimSubtasks(data.task.subtasks);
-
-        if (subtasks.length > 0) {
+        if (data.task.subtasks.length > 0) {
             task.append('div')
                 .classed('days__day__tasks__task__subtasks', true)
                 .selectAll('*')
-                .data(subtasks)
+                .data(data.task.subtasks)
                 .enter()
                 .each(drawSubtask);
         }
