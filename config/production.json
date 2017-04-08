@@ -2,6 +2,6 @@
   "wunderlist": {
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://wlx.igor.lukanin.name/login/result"
+    "redirectUri": "http://wlaide.com/login/result"
   }
 }
