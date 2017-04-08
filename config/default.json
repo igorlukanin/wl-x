@@ -8,7 +8,8 @@
     "clientId": "",
     "clientSecret": "",
     "redirectUri": "http://localhost:4090/login/result",
-    "apiRequestsPerSecond": 25
+    "apiRequestsPerSecond": 25,
+    "recentTaskIntervalDays": 10
   },
   "geoip": {
     "cacheTimeoutDays": 1

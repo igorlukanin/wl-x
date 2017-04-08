@@ -10,6 +10,7 @@ const wunderlist = require('./wunderlist');
 
 const cookieName = config.get('website.authCookie.name');
 const cookieLifetimeDays = config.get('website.authCookie.expireDays');
+const recentTaskIntervalDays = config.get('wunderlist.recentTaskIntervalDays');
 
 
 const create = user => {
@@ -71,9 +72,15 @@ const updateTasks = (user, list) => Promise.all([
     const sets = intersect(result[0], result[1].concat(result[2]));
     const tasks = sets.changed.concat(sets.justDeleted);
 
-    return Promise.map(tasks, task => updateTask(user, task))
+    return Promise.map(tasks, task => updateTaskIfRecent(user, task))
         .then(db.upsertTasks);
 });
+
+const updateTaskIfRecent = (user, task) => {
+    return task.completed && moment(task.completed_at).add(recentTaskIntervalDays, 'days').isBefore(moment())
+        ? Promise.resolve(task)
+        : updateTask(user, task)
+};
 
 const updateTask = (user, task) => wunderlist.getSubtasks(user.accessToken, task.id).then(subtasks => {
     task.subtasks = subtasks;
