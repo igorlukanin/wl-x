@@ -32,8 +32,10 @@ express()
     .use('/fonts', express.static('node_modules/lato-font/fonts'))
     .use('/fonts/lato.css', express.static('node_modules/lato-font/css/lato-font.min.css'))
 
-    .get('/', (req, res) => getUserData(req)
-        .then(data => res.render('user', data))
+    .get('/', (req, res) => res.render('index'))
+
+    .get('/review', (req, res) => getUserData(req)
+        .then(data => res.render('review', data))
         .catch(err => res.render('index')))
 
     .get('/tasks.json', (req, res) => getUserData(req)
@@ -45,8 +47,8 @@ express()
 
     .get('/login/result', (req, res) => wunderlist.getOAuthUser(req.query.state, req.query.code)
         .then(users.create)
-        .then(user => users.setToken(user, res).redirect('/'))
-        .catch(err => res.render('index')))
+        .then(user => users.setToken(user, res).redirect('/review'))
+        .catch(err => res.redirect('/')))
 
     .set('view engine', 'ect')
     .engine('ect', ect({

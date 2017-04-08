@@ -1,5 +1,5 @@
 body {
-    background: #fafafa;
+    background: #fff;
     color: #444;
 
     font-family: 'Lato', sans-serif;
@@ -9,7 +9,114 @@ body {
     margin: 0;
 }
 
+.landing {
+    font-size: 18px;
+    line-height: 28px;
+
+    margin: 15vh 15vw;
+}
+
+.landing a {
+    border-bottom: solid 1px #ccc;
+
+    color: inherit;
+
+    text-decoration: none;
+}
+
+.landing img {
+    margin: 2em 0 0 -4vw;
+
+    width: 75vw;
+}
+
+h1.logo {
+    color: #a3a3a3;
+
+    font-size: 48px;
+    font-weight: 300;
+    font-style: italic;
+
+    margin-bottom: 0.75em;
+}
+
+.logo_name {
+    color: #db4c3f;
+    font-style: normal;
+}
+
+p.logo {
+    width: 45vw;
+}
+
+.login-box {}
+
+.login-box__button {
+    background: #db4c3f;
+    border-bottom: none !important;
+    color: #fafafa !important;
+
+    border-radius: 5px;
+
+    display: inline-block;
+
+    font-weight: 400;
+    text-decoration: none;
+
+    margin: 1em auto;
+    padding: 0.65em 1.25em 0.75em;
+
+    box-shadow: 0 0.5em 2em 0 rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.25s ease;
+}
+
+.login-box__button:hover {
+    box-shadow: 0 0.5em 2em 0 rgba(219, 76, 63, 0.75);
+    transition: box-shadow 0.25s ease;
+}
+
+.login-box__note {
+    color: #737273;
+
+    font-size: 0.8em;
+
+    margin-left: 1.5em;
+}
+
+.feature-box {
+    margin-top: 6em;
+}
+
+h2.feature {
+    color: #737273;
+
+    font-size: 36px;
+    font-weight: 300;
+
+    margin-bottom: 0.75em;
+}
+
+p.feature {
+    margin: 0.5em 0;
+
+    width: 45vw;
+}
+
+.footer-box {
+    margin-top: 3em;
+}
+
+p.footer {
+    color: #737273;
+
+    font-size: 0.8em;
+
+    margin: 0;
+}
+
 .days {
+    background: #fafafa;
+
     display: flex;
     flex-flow: row wrap;
 }
