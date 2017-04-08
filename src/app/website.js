@@ -5,6 +5,7 @@ const ect = require('ect');
 const express = require('express');
 const ip = require('request-ip');
 
+const db = require('../db');
 const geoip = require('../geoip');
 const users = require('../users');
 const wunderlist = require('../wunderlist');
@@ -42,6 +43,9 @@ express()
         .then(data => users.update(data.user).then(() =>
             users.getCompletedTasks(data.user, data.timezone)
                 .then(tasks => res.json({ timezone: data.timezone, tasks })))))
+
+    .get('/status.json', (req, res) => db.getCounts()
+        .then(counts => res.json(counts)))
 
     .get('/login', (req, res) => res.redirect(wunderlist.getOAuthUrl()))
 

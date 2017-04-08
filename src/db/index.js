@@ -65,6 +65,19 @@ const getCompletedTasks = (listIds, earlyDate, lateDate) => connection.then(c =>
     .run(c)
     .then(result.toArray));
 
+const getCounts = () => connection.then(c => r.do([
+    r.table('users').count(),
+    r.table('lists').count(),
+    r.table('tasks').count()
+]).run(c).then(result => ({
+    users: result[0],
+    lists: result[1],
+    tasks: result[2],
+    listsPerUser: Math.round(result[1] / result[0]),
+    tasksPerUser: Math.round(result[2] / result[0]),
+    tasksPerList: Math.round(result[2] / result[1])
+})));
+
 
 module.exports = {
     upsertUser,
@@ -74,5 +87,6 @@ module.exports = {
     getLists,
     upsertTasks,
     getTasks,
-    getCompletedTasks
+    getCompletedTasks,
+    getCounts
 };
