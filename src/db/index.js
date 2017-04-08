@@ -43,10 +43,9 @@ const getUserByCookieToken = cookieToken => connection.then(c => r.table('users'
     .run(c)
     .then(result.toUnit));
 
-const feedUsers = callback => connection.then(c => r.table('users')
+const feedUsers = () => connection.then(c => r.table('users')
     .changes({ includeInitial: true, includeTypes: true })
-    .run(c)
-    .then(cursor => cursor.each((err, entry) => callback(entry))));
+    .run(c));
 
 const upsertLists = lists => upsert('lists', lists);
 

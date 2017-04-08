@@ -13,6 +13,9 @@
   "geoip": {
     "cacheTimeoutDays": 1
   },
+  "crawler": {
+    "restartTimeoutMinutes": 30
+  },
   "website": {
     "port": 4090,
     "authCookie": {

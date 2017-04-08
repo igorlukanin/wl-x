@@ -5,19 +5,27 @@ const db = require('../db');
 const users = require('../users');
 
 
-const checkRoots = () => db.feedUsers(entry => {
-    const user = entry.new_val;
+let cursor = undefined;
 
-    if (user !== undefined) {
-        console.info('Crawler: ' + entry.type + ' / ' + user.id);
+const processUserFeed = () => {
+    console.info('Crawler started');
 
-        Promise.resolve(user)
-            .then(users.updateRoot)
-            .then(users.updateLists)
-            .catch(user => {
-                // User data is unchanged, so do nothing
-            });
+    if (cursor !== undefined) {
+        cursor.close();
     }
-});
 
-checkRoots();
+    db.feedUsers().then(newCursor => {
+        cursor = newCursor;
+        cursor.each((err, entry) => {
+            const user = entry.new_val;
+
+            if (user !== undefined) {
+                console.info('Crawler: ' + entry.type + ' / ' + user.id);
+                users.update(user);
+            }
+        });
+    });
+};
+
+processUserFeed();
+setInterval(processUserFeed, config.get('crawler.restartTimeoutMinutes') * 60 * 1000);

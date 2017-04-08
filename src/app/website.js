@@ -37,10 +37,11 @@ express()
         .catch(err => res.render('index')))
 
     .get('/tasks.json', (req, res) => getUserData(req)
-        .then(data => users.getCompletedTasks(data.user, data.timezone).then(tasks => {
-            data.tasks = tasks;
-            res.json(data);
-        })))
+        .then(data => users.update(data.user).then(() =>
+            users.getCompletedTasks(data.user, data.timezone).then(tasks => {
+                data.tasks = tasks;
+                res.json(data);
+            }))))
 
     .get('/login', (req, res) => res.redirect(wunderlist.getOAuthUrl()))
 

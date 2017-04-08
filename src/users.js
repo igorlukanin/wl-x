@@ -59,6 +59,10 @@ const updateLists = user => Promise.all([
     ]);
 });
 
+const update = user => updateRoot(user).then(updateLists)
+    .then(() => user)
+    .catch(() => user); // User data is unchanged, so do nothing
+
 const updateTasks = (user, list) => Promise.all([
     db.getTasks(list.id),
     wunderlist.getTasks(user.accessToken, list.id),
@@ -119,6 +123,7 @@ module.exports = {
     create,
     updateRoot,
     updateLists,
+    update,
     setToken,
     getByToken,
     getCompletedTasks
