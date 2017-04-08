@@ -1,4 +1,6 @@
 (function() {
+    var timezone = 'UTC';
+
     var drawSubtask = function(data) {
         var subtask = d3.select(this)
             .append('div')
@@ -63,12 +65,12 @@
     };
 
     var drawDay = function(data) {
-        var today = moment(data.day.start);
+        var today = moment(data.day.start).tz(timezone);
 
         var day = d3.select(this)
             .append('div')
             .classed('days__day', true)
-            .classed('days__day_today', today.isoWeekday() === moment().isoWeekday())
+            .classed('days__day_today', today.isoWeekday() === moment().tz(timezone).isoWeekday())
             .classed('days__day_weekend', today.isoWeekday() >= 6);
 
         day.append('div')
@@ -97,12 +99,12 @@
     };
 
     var getWeekName = function(days) {
-        return 'Week ' + moment(days[0].day.start).isoWeek();
+        return 'Week ' + moment(days[0].day.start).tz(timezone).isoWeek();
     };
 
     var getWeekDates = function(days) {
-        var firstDay = moment(days[0].day.start);
-        var lastDay = moment(days[days.length - 1].day.start);
+        var firstDay = moment(days[0].day.start).tz(timezone);
+        var lastDay = moment(days[days.length - 1].day.start).tz(timezone);
 
         return firstDay.month() === lastDay.month()
             ? firstDay.format('MMM D') + '–' + lastDay.format('D')
@@ -157,5 +159,8 @@
             .html(counts.subtasks + ' subtasks');
     };
 
-    d3.json('/tasks.json', drawDays);
+    d3.json('/tasks.json', function(data) {
+        timezone = data.timezone;
+        drawDays(data.tasks);
+    });
 })();

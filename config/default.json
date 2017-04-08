@@ -10,6 +10,9 @@
     "redirectUri": "http://localhost:4090/login/result",
     "apiRequestsPerSecond": 25
   },
+  "geoip": {
+    "cacheTimeoutDays": 1
+  },
   "website": {
     "port": 4090,
     "authCookie": {

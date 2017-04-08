@@ -1,6 +1,6 @@
 const config = require('config');
 const _ = require('lodash');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const Promise = require('bluebird');
 const uuid = require('uuid/v4');
 
@@ -99,13 +99,10 @@ const getByToken = req => new Promise((resolve, reject) => {
         .catch(reject);
 });
 
-const isCompletedBetween = (entry, date1, date2) =>
-    entry.completed && moment(entry.completed_at).isBetween(date1, date2);
-
-const getCompletedTasks = user => {
+const getCompletedTasks = (user, timezone) => {
     const days = [1, 2, 3, 4, 5, 6, 7].map(i => ({
-        start: moment().isoWeekday(i).startOf('day').toDate(),
-        end: moment().isoWeekday(i + 1).startOf('day').toDate()
+        start: moment().tz(timezone).isoWeekday(i).startOf('day').toDate(),
+        end: moment().tz(timezone).isoWeekday(i + 1).startOf('day').toDate()
     }));
 
     return db.getLists(user.id).then(lists => {
