@@ -1,5 +1,12 @@
 (function() {
     var timezone = 'UTC';
+    var subtaskListLimit = 3;
+
+    var getSubtaskTitle = function(data) {
+        return data.trimmed
+            ? data.trimmedCount + ' more subtask' + (data.trimmedCount === 1 ? '' : 's')
+            : data.title;
+    };
 
     var drawSubtask = function(data) {
         var subtask = d3.select(this)
@@ -8,7 +15,8 @@
 
         subtask.append('div')
             .classed('days__day__tasks__task__title', true)
-            .text(data.title);
+            .classed('days__day__tasks__task__title_trimmed', data.trimmed)
+            .text(getSubtaskTitle(data));
     };
 
     var emojiRegex = /^([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/;
@@ -22,6 +30,17 @@
     };
 
     let usedLists = [];
+
+    var trimSubtasks = function(subtasks) {
+        var trimmed = subtasks.slice(0, subtaskListLimit);
+
+        if (subtasks.length > subtaskListLimit) {
+            trimmed[trimmed.length - 1].trimmed = true;
+            trimmed[trimmed.length - 1].trimmedCount = subtasks.length - trimmed.length + 1;
+        }
+
+        return trimmed;
+    };
 
     var drawTask = function(data) {
         var task = d3.select(this)
@@ -41,11 +60,13 @@
             .classed('days__day__tasks__task__title', true)
             .text(data.task.title);
 
-        if (data.task.subtasks.length > 0) {
+        var subtasks = trimSubtasks(data.task.subtasks);
+
+        if (subtasks.length > 0) {
             task.append('div')
                 .classed('days__day__tasks__task__subtasks', true)
                 .selectAll('*')
-                .data(data.task.subtasks)
+                .data(subtasks)
                 .enter()
                 .each(drawSubtask);
         }

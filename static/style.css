@@ -105,6 +105,10 @@ body {
     color: #ccc;
 }
 
+.days__day__tasks__task__title_trimmed {
+    font-style: italic;
+}
+
 .days__day__tasks__task__list {
     font-weight: 400;
 
