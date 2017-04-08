@@ -145,6 +145,10 @@
     var drawDays = function(days) {
         d3.select('.days')
             .selectAll('*')
+            .remove();
+
+        d3.select('.days')
+            .selectAll('*')
             .data(days)
             .enter()
             .each(drawDay);
@@ -172,6 +176,18 @@
             .classed('days__day__week-summary__subtasks', true)
             .html(counts.subtasks + ' subtasks');
     };
+
+    const dummyDays = [
+        { day: { start: '2017-01-02T00:00:00Z', end: '2017-01-03T00:00:00Z' }, tasks: [] },
+        { day: { start: '2017-01-03T00:00:00Z', end: '2017-01-04T00:00:00Z' }, tasks: [] },
+        { day: { start: '2017-01-04T00:00:00Z', end: '2017-01-05T00:00:00Z' }, tasks: [] },
+        { day: { start: '2017-01-05T00:00:00Z', end: '2017-01-06T00:00:00Z' }, tasks: [] },
+        { day: { start: '2017-01-06T00:00:00Z', end: '2017-01-07T00:00:00Z' }, tasks: [] },
+        { day: { start: '2017-01-07T00:00:00Z', end: '2017-01-08T00:00:00Z' }, tasks: [] },
+        { day: { start: '2017-01-08T00:00:00Z', end: '2017-01-09T00:00:00Z' }, tasks: [] }
+    ];
+
+    drawDays(dummyDays);
 
     d3.json('/tasks.json', function(data) {
         timezone = data.timezone;
