@@ -72,10 +72,7 @@ const getCounts = () => connection.then(c => r.do([
 ]).run(c).then(result => ({
     users: result[0],
     lists: result[1],
-    tasks: result[2],
-    listsPerUser: Math.round(result[1] / result[0]),
-    tasksPerUser: Math.round(result[2] / result[0]),
-    tasksPerList: Math.round(result[2] / result[1])
+    tasks: result[2]
 })));
 
 
