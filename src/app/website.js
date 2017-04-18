@@ -6,7 +6,7 @@ const express = require('express');
 const ip = require('request-ip');
 
 const db = require('../db');
-const geoip = require('../geoip');
+const location = require('../location');
 const users = require('../users');
 const wunderlist = require('../wunderlist');
 
@@ -14,12 +14,16 @@ const wunderlist = require('../wunderlist');
 const port = config.get('website.port');
 
 
+process.on('unhandledRejection', err => console.error(err));
+
+
 const getUserData = req => Promise.all([
     users.getByToken(req),
-    geoip.getInfo(ip.getClientIp(req))
-]).then(result => ({
-    user: result[0],
-    timezone: result[1].time_zone === '' ? 'UTC' : result[1].time_zone
+    location.getInfo(ip.getClientIp(req))
+]).then(([ user, location ]) => ({
+    user,
+    timezone: location.timezone,
+    night: location.period === 'night'
 }));
 
 
@@ -37,7 +41,10 @@ express()
 
     .get('/review', (req, res) => getUserData(req)
         .then(data => res.render('review', data))
-        .catch(err => res.render('index')))
+        .catch(err => {
+            console.error(err);
+            res.redirect('/');
+        }))
 
     .get('/tasks.json', (req, res) => getUserData(req)
         .then(data => users.update(data.user).then(() =>

@@ -11,7 +11,8 @@
     "apiRequestsPerSecond": 25,
     "recentTaskIntervalDays": 10
   },
-  "geoip": {
+  "location": {
+    "ipAtLocalhost": "80.83.239.112",
     "cacheTimeoutDays": 1
   },
   "crawler": {

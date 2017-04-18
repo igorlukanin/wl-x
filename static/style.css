@@ -9,6 +9,11 @@ body {
     margin: 0;
 }
 
+.night body {
+    background: #111;
+    color: #999;
+}
+
 .landing {
     font-size: 18px;
     line-height: 28px;
@@ -121,6 +126,10 @@ p.footer {
     flex-flow: row wrap;
 }
 
+.night .days {
+    background-color: #1a1a1a;
+}
+
 .days__day {
     box-sizing: border-box;
 
@@ -136,8 +145,16 @@ p.footer {
     overflow-y: scroll;
 }
 
+.night .days__day {
+    border-color: #111;
+}
+
 .days__day_today {
     background: #fff;
+}
+
+.night .days__day_today {
+    background-color: #222;
 }
 
 .days__day_summary {}
@@ -148,6 +165,10 @@ p.footer {
     font-size: 2em;
 
     text-align: center;
+}
+
+.night .days__day__title {
+    color: #a3a3a3;
 }
 
 .days__day_weekend > .days__day__title {
