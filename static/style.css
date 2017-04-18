@@ -19,10 +19,18 @@ body {
 }
 
 .landing {
-    font-size: 18px;
-    line-height: 28px;
+    font-size: 1.25em;
+    line-height: 150%;
 
     margin: 15vh 15vw;
+}
+
+@media (max-width: 700px) {
+    .landing {
+        font-size: 1.125em;
+
+        margin: 7.5vh 10vw;
+    }
 }
 
 .landing a {
@@ -39,12 +47,19 @@ body {
     width: 75vw;
 }
 
+@media (max-width: 700px) {
+    .landing img {
+        width: 85vw;
+    }
+}
+
 h1.logo {
     color: #a3a3a3;
 
-    font-size: 48px;
+    font-size: 2.75em;
     font-weight: 300;
     font-style: italic;
+    line-height: 1em;
 
     margin-bottom: 0.75em;
 }
@@ -55,7 +70,7 @@ h1.logo {
 }
 
 p.logo {
-    width: 45vw;
+    max-width: 500px;
 }
 
 .login-box {}
@@ -85,6 +100,8 @@ p.logo {
 }
 
 .login-box__note {
+    display: inline-block;
+
     color: #737273;
 
     font-size: 0.8em;
@@ -96,10 +113,16 @@ p.logo {
     margin-top: 6em;
 }
 
+@media (max-width: 700px) {
+    .feature-box {
+        margin-top: 4em;
+    }
+}
+
 h2.feature {
     color: #737273;
 
-    font-size: 36px;
+    font-size: 2em;
     font-weight: 300;
 
     margin-bottom: 0.75em;
@@ -108,7 +131,7 @@ h2.feature {
 p.feature {
     margin: 0.5em 0;
 
-    width: 45vw;
+    max-width: 500px;
 }
 
 .footer-box {
@@ -130,6 +153,14 @@ p.footer {
     flex-flow: row wrap;
 }
 
+@media (max-width: 700px) {
+    .days {
+        flex-flow: row;
+
+        overflow: hidden;
+    }
+}
+
 .night .days {
     background-color: #1a1a1a;
 }
@@ -149,16 +180,37 @@ p.footer {
     overflow-y: scroll;
 }
 
+@media (max-width: 700px) {
+    .days__day {
+        display: none;
+
+        padding: 5vh 10vw;
+
+        height: 100vh;
+        min-width: 100vw;
+    }
+}
+
+.days__day_selected {}
+
+@media (max-width: 700px) {
+    .days__day_selected {
+        display: block;
+    }
+}
+
 .night .days__day {
     border-color: #111;
 }
 
-.days__day_today {
-    background: #fff;
-}
+@media not all and (max-width: 700px) {
+    .days__day_today {
+        background: #fff;
+    }
 
-.night .days__day_today {
-    background-color: #222;
+    .night .days__day_today {
+        background-color: #222;
+    }
 }
 
 .days__day_summary {}
@@ -263,4 +315,78 @@ p.footer {
 
 .days__day__tasks__task__subtasks .days__day__tasks__task__title {
     margin: 0.125em auto;
+}
+
+.days-switcher {
+    display: none;
+    justify-content: space-between;
+
+    position: fixed;
+    top: 90vh;
+    left: 7.5vw;
+
+    background: #eee;
+
+    box-sizing: border-box;
+
+    border-radius: 100vh;
+
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.25);
+
+    padding: 0 1vh;
+
+    width: 85vw;
+}
+
+.night .days-switcher {
+    background: #111;
+}
+
+@media (max-width: 700px) {
+    .days-switcher {
+        display: flex;
+    }
+}
+
+.days-switcher__day {
+    flex: 1;
+
+    color: #5b5b5b;
+
+    font-weight: 400;
+    text-align: center;
+
+    padding: 1.5vh 0;
+}
+
+.night .days-switcher__day {
+    color: #a3a3a3;
+}
+
+.days-switcher__day_today {
+    background: #fff;
+}
+
+.night .days-switcher__day_today {
+    background: #222;
+}
+
+.days-switcher__day_weekend, .night .days-switcher__day_weekend {
+    color: #db4c3f;
+}
+
+.days-switcher__day_summary, .night .days-switcher__day_summary {
+    color: #2b88d9;
+}
+
+.days-switcher__day_selected {
+    opacity: 1;
+}
+
+.days-switcher__letter {
+    opacity: 0.5;
+}
+
+.days-switcher__day_selected .days-switcher__letter {
+    opacity: 1;
 }

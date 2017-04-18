@@ -82,13 +82,15 @@
             });
     };
 
-    var drawDay = function(data) {
+    var drawDay = function(data, i) {
         var today = moment(data.day.start).tz(timezone);
+        var isToday = today.isoWeekday() === moment().tz(timezone).isoWeekday();
 
         var day = d3.select(this)
             .append('div')
             .classed('days__day', true)
-            .classed('days__day_today', today.isoWeekday() === moment().tz(timezone).isoWeekday())
+            .classed('days__day_selected', isToday)
+            .classed('days__day_today', isToday)
             .classed('days__day_weekend', today.isoWeekday() >= 6);
 
         day.append('div')
@@ -114,6 +116,19 @@
                 .classed('days__day__tasks-placeholder', true)
                 .text('No tasks yet');
         }
+
+        d3.select('.days-switcher')
+            .selectAll('.days-switcher__day')
+            .each(function(data, j) {
+                if (i === j) {
+                    d3.select(this).classed('days-switcher__day_today', isToday);
+                    d3.select(this).classed('days-switcher__day_selected', isToday);
+                }
+            });
+    };
+
+    var drawDaySwitcher = function(data) {
+        var today = moment(data.day.start).tz(timezone)
     };
 
     var getWeekName = function(days) {
@@ -156,6 +171,25 @@
             .data(days)
             .enter()
             .each(drawDay);
+
+        d3.select('.days-switcher')
+            .selectAll('.days-switcher__day')
+            .each(function(data, i) {
+                d3.select(this).on('click', function() {
+                    d3.select('.days-switcher')
+                        .selectAll('.days-switcher__day')
+                        .classed('days-switcher__day_selected', false);
+
+                    d3.select(this)
+                        .classed('days-switcher__day_selected', true);
+
+                    d3.select('.days')
+                        .selectAll('.days__day')
+                        .each(function(data, j) {
+                            d3.select(this).classed('days__day_selected', i === j);
+                        });
+                });
+            });
 
         var summary = d3.select('.days')
             .append('div')
