@@ -8,7 +8,6 @@ const clientSecret = config.get('wunderlist.clientSecret');
 const redirectUri = config.get('wunderlist.redirectUri');
 
 const states = [];
-let requestCount = 0;
 
 request.configure({
     requests: config.get('wunderlist.apiRequestsPerSecond'),
@@ -21,9 +20,9 @@ const getOAuthUrl = () => {
     states.push(state);
 
     return 'https://www.wunderlist.com/oauth/authorize' +
-        '?client_id=' + clientId +
-        '&redirect_uri=' + encodeURI(redirectUri) +
-        '&state=' + state;
+        '?client_id=' + encodeURIComponent(clientId) +
+        '&redirect_uri=' + encodeURIComponent(redirectUri) +
+        '&state=' + encodeURIComponent(state);
 };
 
 const getOAuthAccessToken = (state, code) => new Promise((resolve, reject) => {
@@ -50,13 +49,7 @@ const getOAuthAccessToken = (state, code) => new Promise((resolve, reject) => {
     });
 });
 
-const getApiEndpointUri = endpoint => 'https://a.wunderlist.com/api/v1/' + endpoint;
-
-const logApiCall = (endpoint, err) => console.info(
-    'Wunderlist API call # ' + (++requestCount) + ': ' +
-    endpoint +
-    (err ? ' — error' : '')
-);
+const getApiEndpointUri = endpoint => `https://a.wunderlist.com/api/v1/${endpoint}`;
 
 const requestApi = (accessToken, endpoint, params = {}, method = 'GET') => new Promise((resolve, reject) => request({
     url: getApiEndpointUri(endpoint),
@@ -68,7 +61,7 @@ const requestApi = (accessToken, endpoint, params = {}, method = 'GET') => new P
         'X-Access-Token': accessToken
     }
 }, (err, res) => {
-    logApiCall(endpoint, err);
+    console.log(`Wunderlist API call: ${endpoint}`);
 
     if (err) {
         reject('Failed to call API');

@@ -20,7 +20,7 @@ const processUserFeed = () => {
             const user = entry.new_val;
 
             if (user !== undefined) {
-                console.info('Crawler: ' + entry.type + ' / ' + user.id);
+                console.info(`Crawler: ${entry.type} / ${user.id}`);
                 users.update(user);
             }
         });

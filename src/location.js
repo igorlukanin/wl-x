@@ -15,7 +15,7 @@ const getNonLocalhostIp = ip => {
 };
 
 const requestFreeGeoIpApi = ip => new Promise((resolve, reject) => request({
-    url: 'http://freegeoip.net/json/' + ip,
+    url: `http://freegeoip.net/json/${ip}`,
     method: 'GET',
     json: true
 }, (err, res) => {

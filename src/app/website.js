@@ -64,6 +64,6 @@ express()
     .set('view engine', 'ect')
     .engine('ect', ect({
         watch: true,
-        root: __dirname + '/../../views'
+        root: `${__dirname}/../../views`
     }).render)
-    .listen(port, () => console.info('Website started at port ' + port));
+    .listen(port, () => console.info(`Website started at port ${port}`));
