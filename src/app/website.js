@@ -35,7 +35,6 @@ express()
     .use('/moment.js', express.static('node_modules/moment/min/moment.min.js'))
     .use('/moment-timezone.js', express.static('node_modules/moment-timezone/builds/moment-timezone-with-data-2012-2022.min.js'))
     .use('/fonts', express.static('node_modules/lato-font/fonts'))
-    .use('/fonts/lato.css', express.static('node_modules/lato-font/css/lato-font.min.css'))
 
     .get('/', (req, res) => res.render('index'))
 
