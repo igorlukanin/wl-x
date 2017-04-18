@@ -21,6 +21,10 @@
     var emojiRegex = /^([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/;
 
     var getListTitle = function(list) {
+        if (list.list_type === 'inbox') {
+            return 'Inbox';
+        }
+
         var emoji = list.title.match(emojiRegex);
 
         return emoji === null
