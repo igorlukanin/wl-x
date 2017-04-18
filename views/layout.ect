@@ -30,6 +30,16 @@
 
     <script>
         d3.select('html').classed('night', <%= @night %>);
+
+        d3.selectAll('a').on('click', function() {
+            var href = d3.select(this).attr('href');
+            var target = d3.select(this).attr('target');
+
+            if (target === null) {
+                window.location.href = href;
+                return false;
+            }
+        });
     </script>
 
     <!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter44063849 = new Ya.Metrika({ id:44063849, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/44063849" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
