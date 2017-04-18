@@ -322,7 +322,7 @@ p.footer {
     justify-content: space-between;
 
     position: fixed;
-    top: 90vh;
+    bottom: 5vh;
     left: 7.5vw;
 
     background: #eee;
