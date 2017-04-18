@@ -31,13 +31,16 @@
     <script>
         d3.select('html').classed('night', <%= @night %>);
 
-        d3.selectAll('a').on('click', function() {
+        d3.selectAll('a').each(function() {
             var href = d3.select(this).attr('href');
             var target = d3.select(this).attr('target');
 
             if (target === null) {
-                window.location.href = href;
-                return false;
+                d3.select(this)
+                    .attr('href', undefined)
+                    .on('click', function() {
+                        window.location.href = href;
+                    });
             }
         });
     </script>
