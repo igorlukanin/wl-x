@@ -9,10 +9,6 @@ const cache = lru({ maxAge: config.get('location.cacheTimeoutDays') * 24 * 3600 
 
 
 const getNonLocalhostIp = ip => {
-    console.log(ip);
-    console.log(ip === '::1');
-    console.log(config.get('location.ipAtLocalhost'));
-
     return ip === '::1'
         ? config.get('location.ipAtLocalhost')
         : ip;
@@ -23,7 +19,7 @@ const requestFreeGeoIpApi = ip => new Promise((resolve, reject) => request({
     method: 'GET',
     json: true
 }, (err, res) => {
-    console.log('API call');
+    console.log('FreeGeoIP API call');
 
     if (err) {
         reject('Failed to call API');
@@ -38,7 +34,7 @@ const requestSunriseSunsetApi = (latitude, longitude) => new Promise((resolve, r
     method: 'GET',
     json: true
 }, (err, res) => {
-    console.log('API call');
+    console.log('Sunrise Sunset API call');
 
     if (err) {
         reject('Failed to call API');
@@ -52,9 +48,7 @@ const getPeriod = (timezone, times) => {
     const now = moment.tz(timezone);
     const sunrise = moment.tz(times.sunrise, 'HH:mm:ss A', 'UTC');
     const sunset = moment.tz(times.sunset, 'HH:mm:ss A', 'UTC');
-console.log(now.unix());
-console.log(sunrise.unix());
-console.log(sunset.unix());
+
     return now.isBetween(sunrise, sunset) ? 'day' : 'night';
 };
 
@@ -89,15 +83,15 @@ sunrise: {
 
 const loadInfo = ip => requestFreeGeoIpApi(getNonLocalhostIp(ip))
     .then(geoip => requestSunriseSunsetApi(geoip.latitude, geoip.longitude)
-        .then(sunrise => ({
-            timezone: geoip.time_zone,
-            period: getPeriod(geoip.time_zone, sunrise.results)
-        })));
+        .then(sunrise => ({ geoip, sunrise })));
+
+const calculateInfo = ({ geoip, sunrise }) => ({
+    timezone: geoip.time_zone,
+    period: getPeriod(geoip.time_zone, sunrise.results)
+});
 
 const getInfo = ip => {
     const value = cache.get(ip);
-
-    console.log(value);
 
     if (value !== undefined) {
         return Promise.resolve(value);
@@ -111,5 +105,5 @@ const getInfo = ip => {
 
 
 module.exports = {
-    getInfo
+    getInfo: ip => getInfo(ip).then(calculateInfo)
 };
