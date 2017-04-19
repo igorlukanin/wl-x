@@ -9,6 +9,10 @@ const cache = lru({ maxAge: config.get('location.cacheTimeoutDays') * 24 * 3600 
 
 
 const getNonLocalhostIp = ip => {
+    console.log(ip);
+    console.log(ip === '::1');
+    console.log(config.get('location.ipAtLocalhost'));
+
     return ip === '::1'
         ? config.get('location.ipAtLocalhost')
         : ip;
@@ -48,7 +52,9 @@ const getPeriod = (timezone, times) => {
     const now = moment.tz(timezone);
     const sunrise = moment.tz(times.sunrise, 'HH:mm:ss A', 'UTC');
     const sunset = moment.tz(times.sunset, 'HH:mm:ss A', 'UTC');
-
+console.log(now.unix());
+console.log(sunrise.unix());
+console.log(sunset.unix());
     return now.isBetween(sunrise, sunset) ? 'day' : 'night';
 };
 
@@ -90,6 +96,8 @@ const loadInfo = ip => requestFreeGeoIpApi(getNonLocalhostIp(ip))
 
 const getInfo = ip => {
     const value = cache.get(ip);
+
+    console.log(value);
 
     if (value !== undefined) {
         return Promise.resolve(value);
