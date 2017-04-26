@@ -208,11 +208,11 @@
 
         summary.append('div')
             .classed('days__day__week-summary', true)
-            .html(counts.tasks + ' tasks');
+            .html(counts.tasks + (counts.tasks == 1 ? ' tasks' : ' task'));
 
         summary.append('div')
             .classed('days__day__week-summary__subtasks', true)
-            .html(counts.subtasks + ' subtasks');
+            .html(counts.subtasks + (counts.subtasks == 1 ? ' subtasks' : ' subtask'));
     };
 
     const dummyDays = [
