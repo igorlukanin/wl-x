@@ -106,7 +106,9 @@ p.logo {
     max-width: 500px;
 }
 
-.login-box {}
+.login-box {
+    margin-bottom: 6em;
+}
 
 .login-box__button {
     background: #db4c3f;
@@ -132,14 +134,20 @@ p.logo {
     transition: box-shadow 0.25s ease;
 }
 
-.feature-box {
-    margin-top: 6em;
+.feature-box-columns {
+    display: flex;
+    flex-direction: row;
+
+    font-size: 0.8em;
+    line-height: 150%;
 }
 
-@media (max-width: 700px) {
-    .feature-box {
-        margin-top: 4em;
-    }
+.feature-box {
+    margin-top: 3em;
+}
+
+.feature-box-columns .feature-box {
+    width: 50%;
 }
 
 h2.feature {
@@ -153,12 +161,13 @@ h2.feature {
 
 p.feature {
     margin: 0.5em 0;
+    padding-right: 5vw;
 
     max-width: 500px;
 }
 
 .footer-box {
-    margin-top: 3em;
+    margin-top: 6em;
 }
 
 p.footer {
@@ -346,7 +355,7 @@ p.footer {
 
     position: fixed;
     bottom: 5vh;
-    left: 7.5vw;
+    left: 10vw;
 
     background: #eee;
 
@@ -356,9 +365,7 @@ p.footer {
 
     box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.25);
 
-    padding: 0 1vh;
-
-    width: 85vw;
+    width: 80vw;
 }
 
 .night .days-switcher {
@@ -373,6 +380,8 @@ p.footer {
 
 .days-switcher__day {
     flex: 1;
+
+    border-radius: 100vh;
 
     color: #5b5b5b;
 
