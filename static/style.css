@@ -132,16 +132,6 @@ p.logo {
     transition: box-shadow 0.25s ease;
 }
 
-.login-box__note {
-    display: inline-block;
-
-    color: #737273;
-
-    font-size: 0.8em;
-
-    margin-left: 1.5em;
-}
-
 .feature-box {
     margin-top: 6em;
 }
